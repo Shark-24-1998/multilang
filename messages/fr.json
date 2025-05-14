@@ -1,0 +1,12 @@
+{
+  "HomePage": {
+    "title": "Bonjour le monde!",
+    "about": "Accéder à la page à propos",
+    "contact" : "Contactez ici"
+  },
+  "Header":{
+    "home" : "maison",
+    "about" : "à propos",
+    "contact" : "contact"
+  }
+}

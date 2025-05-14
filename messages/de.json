@@ -1,0 +1,12 @@
+{
+  "HomePage": {
+    "title": "Hallo wereld!",
+    "about": "Ga naar de over ons-pagina",
+    "contact" : "Neem hier contact op"
+  },
+   "Header":{
+    "home" : "thuis",
+    "about" : "over",
+    "contact" : "contact"
+  }
+}
