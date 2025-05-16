@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-
+import { RiShare2Line } from "react-icons/ri";
 export default function ShareMenu() {
   const [show, setShow] = useState(false);
   const ref = useRef(null);
@@ -33,9 +33,7 @@ export default function ShareMenu() {
         className="flex items-center gap-1 cursor-pointer hover:text-gray-800"
         onClick={() => setShow(!show)}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 fill-gray-400" viewBox="0 0 24 24">
-          <path d="M18 2h-8l-6 6v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-        </svg>
+         <RiShare2Line size={20} />
         <span>Share</span>
       </div>
 

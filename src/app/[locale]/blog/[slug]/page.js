@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { useState } from "react";
 import ShareMenu from "../../components/ShareMenu";
 import CommentsSidebar from "../../components/Comments";
+import { BiLike , BiDislike} from "react-icons/bi";
+import { FaRegComment } from "react-icons/fa";
 
 // Dummy blog data
 const blogs = [
@@ -92,19 +94,17 @@ export default function BlogDetail({ params }) {
       {/* Reaction Row */}
       <div className="flex items-center gap-6 text-gray-500 text-sm mt-6 border-y py-4">
         <div className="flex items-center gap-1 cursor-pointer" onClick={() => setLikes(likes + 1)}>
-          <span>👍</span>
+          <span><BiLike size={20} /></span>
           <span>{likes}</span>
         </div>
 
         <div className="flex items-center gap-1 cursor-pointer" onClick={() => setIsSidebarOpen(true)}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 fill-gray-400" viewBox="0 0 24 24">
-            <path d="M20 2H4C2.9 2 2 2.9 2 4v14l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
-          </svg>
+          <FaRegComment size={20}/>
           <span>{blog.comments}</span>
         </div>
 
         <div className="flex items-center gap-1 cursor-pointer" onClick={() => setDislikes(dislikes + 1)}>
-          <span>👎</span>
+          <span><BiDislike size={20}/></span>
           <span>{dislikes}</span>
         </div>
 
