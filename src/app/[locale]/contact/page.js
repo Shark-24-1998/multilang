@@ -40,13 +40,13 @@ export default function ContactForm() {
       <div className="w-full max-w-md rounded-lg p-6 sm:p-8 text-center border border-gray-700 backdrop-blur-md bg-white/10 shadow-2xl">
         <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-white">Get in Touch</h2>
         <p className="text-gray-300 mb-6 text-sm sm:text-base">
-          We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+          {"We'd love to hear from you. Send us a message and we'll respond as soon as possible."}
         </p>
 
         {isSubmitted && (
           <div className="bg-green-500/20 border border-green-500 rounded-md p-4 mb-6">
             <p className="text-green-300 font-medium">
-              Thank you for your message! We'll be in touch soon.
+             {" Thank you for your message! We'll be in touch soon."}
             </p>
           </div>
         )}

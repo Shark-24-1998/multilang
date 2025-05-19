@@ -11,12 +11,14 @@ export default function Home() {
             className="text-3xl leading-snug md:text-4xl font-semibold"
             style={{ color: 'rgb(77, 145, 188)' }}
           >
-            Build, share, and explore community-made <br className="hidden lg:block" /> components with Tailwind CSS
+            Read, share, and explore community-written <br className="hidden lg:block" /> blogs packed with insights, stories, and inspiration.
+
           </h1>
 
           <p className="mt-4 text-lg text-black">
-            Discover open-source UI elements to kickstart your apps, projects, or websites —<br className="hidden lg:block" />
-            all built with the power and flexibility of Tailwind CSS.
+            Discover community-written blogs to inspire your apps, projects, or websites —<br className="hidden lg:block" />
+            filled with ideas, insights, and real-world experiences.
+
           </p>
         </div>
 
@@ -37,7 +39,7 @@ export default function Home() {
       <section className="mt-10 py-20 bg-[rgb(77,145,188)]" >
         <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
           <h2 className="text-3xl font-bold text-center mb-12 text-white">
-            What Our Users Say  
+            What Our Users Say
           </h2>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {[
