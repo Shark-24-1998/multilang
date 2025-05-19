@@ -49,7 +49,7 @@ export default function Blog() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen px-4 md:px-12 py-10 max-w-screen-xl mx-auto">
+    <div className="min-h-screen px-4 md:px-12 py-20 max-w-screen-xl mx-auto">
       <h1 className="text-4xl font-bold mb-8 text-center">Our Blog</h1>
 
       {/* Mobile view: vertical list */}
