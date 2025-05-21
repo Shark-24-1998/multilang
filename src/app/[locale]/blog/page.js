@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
@@ -40,83 +41,39 @@ const blogs = [
     likes: 142,
     dislikes: 4,
     image:
-      "//images.pexels.com/photos/31840012/pexels-photo-31840012/free-photo-of-moody-misty-forest-path-in-ocypel-poland.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "https://images.pexels.com/photos/31840012/pexels-photo-31840012/free-photo-of-moody-misty-forest-path-in-ocypel-poland.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     content: `...`,
   },
 ];
 
-export default function Blog() {
+export default function BlogPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen px-4 md:px-12 py-20 max-w-screen-xl mx-auto">
-      <h1 className="text-4xl font-bold mb-8 text-center">Our Blog</h1>
-
-      {/* Mobile view: vertical list */}
-      <div className="block md:hidden">
-        {blogs.map((blog, index) => (
-          <div key={index}>
-            <div
-              onClick={() => router.push(`/blog/${blog.slug}`)}
-              className="cursor-pointer"
-            >
-              <img
-                src={blog.image}
-                alt={blog.title}
-                className="w-full h-48 object-cover rounded-lg"
-              />
-              <div className="py-4">
-                <p className="text-sm text-gray-500">
-                  By <span className="font-semibold">{blog.author}</span>
-                </p>
-                <h2 className="text-lg font-bold mt-1">{blog.title}</h2>
-                <p className="text-gray-600 text-sm line-clamp-2 mt-1">
-                  {blog.description}
-                </p>
-                
-                {/* Updated mobile view: date and icons in one row */}
-                <div className="flex justify-between items-center mt-3 text-sm text-gray-500">
-                  <div>{blog.date}</div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1">
-                      <FaRegComment />
-                      {blog.comments}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <BiLike />
-                      {blog.likes}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <BiDislike />
-                      {blog.dislikes}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Horizontal line between posts */}
-            {index !== blogs.length - 1 && (
-              <hr className="my-6 border-gray-300" />
-            )}
-          </div>
-        ))}
+    <div className="min-h-screen px-4 md:px-8 py-20 max-w-7xl mx-auto">
+      <div className="text-center mb-16">
+        <p className="text-sm uppercase tracking-wide text-gray-500">The Blog</p>
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          Learn from our content experts
+        </h1>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          From writing to publishing, our expert team answers the biggest questions in the online content community.
+        </p>
       </div>
 
-      {/* Desktop grid view */}
-      <div className="hidden md:grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {blogs.map((blog, index) => (
           <div
             key={index}
             onClick={() => router.push(`/blog/${blog.slug}`)}
-            className="bg-white shadow-md rounded-2xl overflow-hidden cursor-pointer hover:shadow-2xl transition duration-300"
+            className="rounded-2xl bg-gradient-to-t from-gray-100 via-gray-50 to-white hover:from-blue-300 hover:to-white shadow-sm hover:shadow-lg transition duration-300 ease-in-out transform hover:scale-[1.02] cursor-pointer overflow-hidden"
           >
             <img
               src={blog.image}
               alt={blog.title}
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-cover hover:brightness-105 transition duration-300"
             />
-            <div className="p-4 flex flex-col justify-between min-h-[220px]">
+            <div className="p-5 flex flex-col justify-between min-h-[220px]">
               <div>
                 <p className="text-sm text-gray-500 mb-1">
                   By <span className="font-semibold">{blog.author}</span>
@@ -126,22 +83,19 @@ export default function Blog() {
                   {blog.description}
                 </p>
               </div>
-              <div className="flex justify-between items-center mt-2 text-sm text-gray-500 w-full">
-                {/* Date on the left */}
-                <span className="whitespace-nowrap">{blog.date}</span>
-
-                {/* Icons on the right */}
-                <div className="flex items-center gap-3 flex-shrink-0">
+              <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
+                <span>{blog.date}</span>
+                <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1">
-                    <FaRegComment className="text-base" />
+                    <FaRegComment />
                     <span>{blog.comments}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <BiLike className="text-base" />
+                    <BiLike />
                     <span>{blog.likes}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <BiDislike className="text-base" />
+                    <BiDislike />
                     <span>{blog.dislikes}</span>
                   </div>
                 </div>

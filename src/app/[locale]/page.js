@@ -1,79 +1,63 @@
-import AnimatedImage from "./components/AnimatedImage";
-import BlogShowcaseSection from "./components/BlogSection";
+import Image from 'next/image';
+import BlogShowcaseSection from './components/BlogSection';
+import TrustPartner from './components/TrustPartner';
+import WritersSection from './components/WriterSection';
+import Offer from './components/Offer';
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div className="scroll-smooth">
       {/* Hero Section */}
-      <section className="container mt-15 px-4 py-10 mx-auto lg:h-128 lg:space-x-8 lg:flex lg:items-center">
-        <div className="w-full text-center lg:text-left lg:w-1/2 lg:-mt-8">
-          <h1
-            className="text-3xl leading-snug md:text-4xl font-semibold"
-            style={{ color: 'rgb(77, 145, 188)' }}
-          >
-            Read, share, and explore community-written <br className="hidden lg:block" /> blogs packed with insights, stories, and inspiration.
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Text content */}
+          <div>
+            <p className="text-sm font-semibold tracking-widest text-gray-500 uppercase mb-4">
+              Build authority with Blogify
+            </p>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
+              Your trusted partner <br /> for industry-leading content
+            </h1>
+            <p className="text-lg text-gray-600 mb-8">
+              End-to-end content marketing with data-driven content strategy and high authority articles written by subject-matter experts.
+            </p>
+            <a
+              href="#blog-highlights"
+              className="text-base font-medium text-gray-800 border-b-2 border-gray-400 hover:border-gray-800 transition"
+            >
+              Learn more
+            </a>
+          </div>
 
-          </h1>
-
-          <p className="mt-4 text-lg text-black">
-            Discover community-written blogs to inspire your apps, projects, or websites —<br className="hidden lg:block" />
-            filled with ideas, insights, and real-world experiences.
-
-          </p>
-        </div>
-
-        <div className="w-full mt-4 lg:mt-0 lg:w-1/2">
-          <AnimatedImage />
-        </div>
-      </section>
-
-      {/* Spacer */}
-      <div className="h-12"></div>
-
-      {/* Blog Section Box */}
-      <section className="px-4 md:px-8">
-        <div className="border border-gray-200 rounded-2xlpy-12 px-6 md:px-12">
-          <BlogShowcaseSection />
-        </div>
-      </section>
-      <section className="mt-10 py-20 bg-[rgb(77,145,188)]" >
-        <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12 text-white">
-            What Our Users Say
-          </h2>
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                name: "Sarah Johnson",
-                role: "Frontend Developer",
-                feedback:
-                  "This platform saved me hours! The Tailwind components are sleek, responsive, and easy to implement.",
-              },
-              {
-                name: "Alex Green",
-                role: "UI/UX Designer",
-                feedback:
-                  "I love the clean structure and creativity of this site. It’s my go-to for quick layout ideas.",
-              },
-              {
-                name: "Maya Patel",
-                role: "Full-Stack Engineer",
-                feedback:
-                  "Animations, transitions, everything just works so well together. Hats off to the team!",
-              },
-            ].map((testimonial, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition duration-300">
-                <p className="text-gray-700 mb-4">“{testimonial.feedback}”</p>
-                <div className="text-sm text-gray-500 font-medium">
-                  — {testimonial.name}, {testimonial.role}
-                </div>
-              </div>
-            ))}
+          {/* Image content */}
+          <div className="relative w-full max-w-md mx-auto lg:mx-0">
+            <Image
+              src="/images/hero-image.png"
+              alt="Hero visual"
+              priority
+              width={500}
+              height={500}
+              className="w-full h-auto"
+            />
           </div>
         </div>
       </section>
 
-    </div>
+      {/* Trusted Partner Section */}
+      <TrustPartner />
 
+      {/* Writers Section */}
+      <WritersSection />
+      {/* Blog Section */}
+
+      <section id="blog-highlights">
+        <BlogShowcaseSection />
+      </section>
+
+      {/* What do we offer */}
+      <Offer />
+
+
+    </div>
   );
 }

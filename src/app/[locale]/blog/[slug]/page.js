@@ -21,7 +21,7 @@ const blogs = [
       <p>This approach helps build safer and more testable code using immutable data.</p>
     `,
   },
-   {
+  {
     title: "Next.js 15 Released!",
     description: "Explore the new features and improvements in Next.js 15.",
     slug: "nextjs-15-released",
@@ -32,7 +32,7 @@ const blogs = [
     dislikes: 3,
     image:
       "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      content: `
+    content: `
       <p>In my <a href="#">previous article</a>, I demonstrated the power of a functional core architecture in Rust.</p>
       <p>This approach helps build safer and more testable code using immutable data.</p>
     `,
@@ -48,35 +48,29 @@ const blogs = [
     dislikes: 2,
     image:
       "https://images.pexels.com/photos/355952/pexels-photo-355952.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      content: `
-      <p>In my <a href="#">previous article</a>, I demonstrated the power of a functional core architecture in Rust.</p>
-      <p>This approach helps build safer and more testable code using immutable data.</p>
+    content: `
+      <p>Attribution modelling is one of the most important aspects of content marketing. It helps marketers determine which pieces of content are driving results, which in turn helps them allocate time, effort, and budget more effectively. 
+
+Yet, it can be challenging to know where to begin with attribution modelling, especially given the several attribution models to choose from. These models describe how credit for a conversion is distributed among content, and depending on the model you pick, different touchpoints may appear more or less influential in your analysis.
+
+This guide breaks down the most common models, explains how they work, and offers guidance on selecting the right one.</>
     `,
   },
-  // ... other blogs
+  // Add more blogs here...
 ];
 
-// ✅ Dynamic Metadata
 export async function generateMetadata({ params }) {
   const blog = blogs.find((b) => b.slug === params.slug);
   if (!blog) return notFound();
 
   return generateSeo({
     title: blog.title,
-    description: blog.subtitle || blog.description,
-    images: [
-      {
-        url: blog.image,
-        width: 1200,
-        height: 630,
-        alt: blog.title,
-      },
-    ],
-    metadataBase: new URL("https://multilang-nine.vercel.app/en"),
+    description: blog.subtitle,
+    images: [{ url: blog.image, width: 1200, height: 630 }],
+    metadataBase: new URL("https://your-site-url.com"),
   });
 }
 
-// ✅ Server component (passes data to client)
 export default function BlogPage({ params }) {
   const blog = blogs.find((b) => b.slug === params.slug);
   if (!blog) return notFound();
