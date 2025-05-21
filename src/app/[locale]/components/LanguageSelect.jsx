@@ -33,7 +33,7 @@ const LanguageSelect = () => {
 
   return (
     <>
-    <h4 className="hover:text-black">Language &rarr;</h4>
+    <h4 className="hover:text-black">Language</h4>
     <select
       className="border rounded px-2 py-1 hover:text-black"
       value={language}
