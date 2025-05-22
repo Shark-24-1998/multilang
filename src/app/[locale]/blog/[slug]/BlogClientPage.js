@@ -20,7 +20,7 @@ export default function BlogClientPage({ blog }) {
   };
 
   return (
-    <div className="bg-gradient-to-b from-pink-100 via-pink-50 to-white min-h-screen mt-10">
+    <div className="bg-gradient-to-b from-pink-100 via-pink-50 to-white min-h-screen mt-20">
       <div className="max-w-3xl mx-auto px-4 py-10 text-gray-800">
         <h1 className="text-4xl font-bold">{blog.title}</h1>
         <p className="text-xl text-gray-600 mt-2">{blog.subtitle}</p>
