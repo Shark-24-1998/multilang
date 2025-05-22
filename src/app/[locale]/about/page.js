@@ -260,8 +260,8 @@ export default function AboutPage() {
               Have Questions?
             </h2>
             <p className="text-lg md:text-xl opacity-90 mb-10 max-w-2xl mx-auto leading-relaxed">
-              We're here to help you succeed on your blogging journey. Whether you need technical support, 
-              have feature requests, or want to share feedback, our team is ready to assist you.
+             {` We're here to help you succeed on your blogging journey. Whether you need technical support, 
+              have feature requests, or want to share feedback, our team is ready to assist you.`}
             </p>
             <Link 
               href="/contact" 
