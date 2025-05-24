@@ -3,7 +3,7 @@ export function generateSeo({
   description = 'Explore insightful articles on Next.js, React, and modern web development trends. Stay current with best practices and expert advice.',
   images = [
     {
-      url: '/blog_cover.png', // Update this to a relevant image in your public folder
+      url: '/blog_cover.png',
       width: 1200,
       height: 630,
       alt: 'Tech Blog Cover'
@@ -36,4 +36,18 @@ export function generateSeo({
       images
     }
   };
+}
+
+// ✅ Add this helper
+export function getClientSeoData() {
+  const {
+    title: { default: title },
+    description,
+    openGraph
+  } = generateSeo();
+
+  const image = openGraph.images?.[0]?.url || "";
+  const alt = openGraph.images?.[0]?.alt || "";
+
+  return { title, description, image, alt };
 }
