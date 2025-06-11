@@ -11,7 +11,7 @@ export default function CreatePost() {
         <div className="w-full max-w-7xl">
           {/* Header Section */}
           <div className="text-center mb-6 sm:mb-8 sm:ml-8 lg:mb-12 pt-4 sm:pt-0">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-transparent mb-2 sm:mb-3 lg:mb-4 px-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-transparent mb-2 sm:mb-3 lg:mb-4 px-2 ">
               Create Blog Post
             </h1>
             <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-xs sm:max-w-md lg:max-w-2xl mx-auto px-4 leading-relaxed">

@@ -1,11 +1,38 @@
-import createMiddleware from 'next-intl/middleware';
-import {routing} from './i18n/routing';
- 
-export default createMiddleware(routing);
- 
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "@/i18n/routing";
+
+// i18n middleware
+const intlMiddleware = createMiddleware(routing);
+
+// Match localized protected routes
+const isProtectedRoute = createRouteMatcher([
+  '/en/create-post',
+  '/fr/create-post',
+  '/es/create-post',
+]);
+
+export default clerkMiddleware(async (auth, req) => {
+  const authResult = await auth(); // ✅ await and store the result
+  const { userId } = authResult;
+
+  if (isProtectedRoute(req)) {
+    if (!userId) {
+      // ✅ use authResult.redirectToSignIn()
+      return authResult.redirectToSignIn({ returnBackUrl: req.url });
+    }
+  }
+
+  // Run intl middleware too
+  const response = intlMiddleware(req);
+  if (response) return response;
+
+  return;
+});
+
 export const config = {
-  // Match all pathnames except for
-  // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
-  // - … the ones containing a dot (e.g. `favicon.ico`)
-  matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)'
+  matcher: [
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    '/(api|trpc)(.*)',
+  ],
 };
