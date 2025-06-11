@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "@/i18n/routing";
@@ -5,7 +6,7 @@ import { routing } from "@/i18n/routing";
 // i18n middleware
 const intlMiddleware = createMiddleware(routing);
 
-// Match localized protected routes
+// Match protected localized routes
 const isProtectedRoute = createRouteMatcher([
   '/en/create-post',
   '/fr/create-post',
@@ -13,19 +14,18 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const authResult = await auth(); // ✅ await and store the result
-  const { userId } = authResult;
+  const { userId } = await auth();
 
   if (isProtectedRoute(req)) {
     if (!userId) {
-      // ✅ use authResult.redirectToSignIn()
-      return authResult.redirectToSignIn({ returnBackUrl: req.url });
+      const signInUrl = new URL('/sign-in', req.url);
+      signInUrl.searchParams.set('returnBackUrl', req.url);
+      return NextResponse.redirect(signInUrl);
     }
   }
 
-  // Run intl middleware too
-  const response = intlMiddleware(req);
-  if (response) return response;
+  const intlResponse = intlMiddleware(req);
+  if (intlResponse) return intlResponse;
 
   return;
 });
