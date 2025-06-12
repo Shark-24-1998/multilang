@@ -35,8 +35,8 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
       }),
       Image.configure({
         HTMLAttributes: {
-          class: "max-w-full h-auto mx-auto my-4 rounded-lg shadow-md",
-          style: "max-width: 800px;" // Default max width
+          class: "mx-auto my-4 rounded-lg shadow-md",
+          style: "max-width: calc(100% - 2rem); height: auto; display: block;", // Account for padding
         },
         allowBase64: true,
         inline: false,
@@ -45,7 +45,25 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
     content,
     editorProps: {
       attributes: {
-        class: "min-h-[300px] md:min-h-[400px] w-full bg-white rounded-xl border-0 px-3 md:px-6 py-3 md:py-4 focus:outline-none prose prose-sm md:prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-strong:text-gray-900 prose-strong:font-semibold prose-em:text-gray-700 prose-em:italic prose-ul:space-y-1 prose-ol:space-y-1 prose-li:text-gray-700 prose-img:mx-auto prose-img:max-w-full prose-img:h-auto prose-img:my-4",
+        class: `
+          min-h-[300px] md:min-h-[400px] 
+          w-full bg-white rounded-xl border-0 
+          px-3 md:px-6 py-3 md:py-4 
+          focus:outline-none 
+          prose prose-sm md:prose-lg max-w-none 
+          prose-headings:text-gray-900 prose-headings:font-bold 
+          prose-p:text-gray-700 prose-p:leading-relaxed 
+          prose-strong:text-gray-900 prose-strong:font-semibold 
+          prose-em:text-gray-700 prose-em:italic 
+          prose-ul:space-y-1 prose-ol:space-y-1 
+          prose-li:text-gray-700 
+          [&_img]:mx-auto 
+          [&_img]:rounded-lg 
+          [&_img]:shadow-md 
+          [&_img]:my-4
+          [&_img]:max-w-[calc(100%-2rem)]
+          md:[&_img]:max-w-[800px]
+        `.replace(/\s+/g, ' ').trim(),
         'data-placeholder': 'Start writing your blog post...',
       },
     },

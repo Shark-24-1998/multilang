@@ -38,7 +38,6 @@ export default function MenuBar({ editor, isMobile = false }) {
     const file = e.target.files?.[0];
     if (!file || !editor) return;
 
-    // Add image size validation
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
     if (file.size > MAX_FILE_SIZE) {
       alert("Image size should be less than 5MB");
@@ -47,31 +46,36 @@ export default function MenuBar({ editor, isMobile = false }) {
 
     const reader = new FileReader();
     reader.onload = () => {
-      // Create a temporary image to get dimensions
       const img = new Image();
       img.src = reader.result;
       
       img.onload = () => {
-        // Calculate aspect ratio to maintain proportions
-        const maxWidth = 800; // Maximum width in pixels
-        const maxHeight = 600; // Maximum height in pixels
+        // Set fixed dimensions for mobile
+        const isMobile = window.innerWidth < 768;
+        const containerWidth = isMobile ? window.innerWidth - 32 : 800; // Account for padding on mobile
+        
+        // Calculate dimensions while maintaining aspect ratio
         let width = img.width;
         let height = img.height;
+        const aspectRatio = width / height;
 
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width);
-          width = maxWidth;
+        if (width > containerWidth) {
+          width = containerWidth;
+          height = width / aspectRatio;
         }
+
+        // Limit height on mobile
+        const maxHeight = isMobile ? window.innerHeight * 0.4 : window.innerHeight * 0.7;
         if (height > maxHeight) {
-          width = Math.round((width * maxHeight) / height);
           height = maxHeight;
+          width = height * aspectRatio;
         }
 
         editor.chain().focus().setImage({ 
           src: reader.result,
           HTMLAttributes: {
-            class: "max-w-full h-auto mx-auto rounded-lg shadow-md",
-            style: `max-width: ${width}px; max-height: ${height}px;`,
+            class: "mx-auto rounded-lg shadow-md",
+            style: `width: ${width}px; height: ${height}px; max-width: 100%;`,
           }
         }).run();
       };
