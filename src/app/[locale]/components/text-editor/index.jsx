@@ -3,12 +3,14 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Image from "@tiptap/extension-image";
-import React, { useState, useEffect } from "react";
-import { Save, Send, CheckCircle, AlertCircle } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react"; // Add useRef
+import { Save, Send, CheckCircle, AlertCircle, Upload } from "lucide-react"; // Add Upload
 import MenuBar from "./menu-bar";
 
 export default function TextEditor({ content = "", onChange = () => {} }) {
   const [title, setTitle] = useState("");
+  const [authorName, setAuthorName] = useState("");
+  const [authorImage, setAuthorImage] = useState("");
   const [saveStatus, setSaveStatus] = useState(""); // "saving", "saved", "error"
   const [publishStatus, setPublishStatus] = useState(""); // "publishing", "published", "error"
   
@@ -33,14 +35,17 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
       }),
       Image.configure({
         HTMLAttributes: {
-          class: "rounded-lg shadow-sm max-w-full h-auto",
+          class: "max-w-full h-auto mx-auto my-4 rounded-lg shadow-md",
+          style: "max-width: 800px;" // Default max width
         },
+        allowBase64: true,
+        inline: false,
       }),
     ],
     content,
     editorProps: {
       attributes: {
-        class: "min-h-[300px] md:min-h-[400px] w-full bg-white rounded-xl border-0 px-3 md:px-6 py-3 md:py-4 focus:outline-none prose prose-sm md:prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-strong:text-gray-900 prose-strong:font-semibold prose-em:text-gray-700 prose-em:italic prose-ul:space-y-1 prose-ol:space-y-1 prose-li:text-gray-700 prose-img:rounded-lg prose-img:shadow-sm placeholder:text-gray-400",
+        class: "min-h-[300px] md:min-h-[400px] w-full bg-white rounded-xl border-0 px-3 md:px-6 py-3 md:py-4 focus:outline-none prose prose-sm md:prose-lg max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-strong:text-gray-900 prose-strong:font-semibold prose-em:text-gray-700 prose-em:italic prose-ul:space-y-1 prose-ol:space-y-1 prose-li:text-gray-700 prose-img:mx-auto prose-img:max-w-full prose-img:h-auto prose-img:my-4",
         'data-placeholder': 'Start writing your blog post...',
       },
     },
@@ -67,6 +72,8 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
       const postData = {
         title: title.trim(),
         content: editor.getHTML(),
+        authorName: authorName.trim(),
+        authorImage: authorImage.trim(),
         status: 'draft',
         updatedAt: new Date().toISOString()
       };
@@ -95,6 +102,8 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
       const postData = {
         title: title.trim() || 'Untitled Draft',
         content: editor.getHTML(),
+        authorName: authorName.trim(),
+        authorImage: authorImage.trim(),
         status: 'draft',
         savedAt: new Date().toISOString()
       };
@@ -131,6 +140,8 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
       const postData = {
         title: title.trim(),
         content: editor.getHTML(),
+        authorName: authorName.trim(),
+        authorImage: authorImage.trim(),
         status: 'published',
         publishedAt: new Date().toISOString()
       };
@@ -170,9 +181,78 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
         />
       </div>
 
+      {/* Author Section */}
+      <div className="mb-6 md:mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          {/* Author Avatar */}
+          <div className="flex-shrink-0">
+            <div className="relative">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setAuthorImage(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+                className="hidden"
+                id="author-image-upload"
+              />
+              {authorImage ? (
+                <img
+                  src={authorImage}
+                  alt={authorName || "Author"}
+                  className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-gray-200 shadow-sm"
+                />
+              ) : (
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm">
+                  <span className="text-white font-semibold text-lg md:text-xl">
+                    {authorName ? authorName.charAt(0).toUpperCase() : "A"}
+                  </span>
+                </div>
+              )}
+              <label
+                htmlFor="author-image-upload"
+                className="absolute -bottom-1 -right-1 w-5 h-5 md:w-6 md:h-6 bg-white rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors duration-200 shadow-sm cursor-pointer"
+                title="Upload author image"
+              >
+                <Upload className="w-2.5 h-2.5 md:w-3 md:h-3 text-gray-600" />
+              </label>
+            </div>
+          </div>
+          
+          {/* Author Info */}
+          <div className="flex-grow">
+            <div className="space-y-1">
+              <input
+                type="text"
+                value={authorName}
+                onChange={(e) => setAuthorName(e.target.value)}
+                placeholder="Author name..."
+                className="w-full sm:max-w-xs text-sm md:text-base font-medium text-gray-900 bg-transparent border-0 border-b border-gray-200 focus:border-blue-500 focus:outline-none pb-1 placeholder:text-gray-400 transition-colors duration-200"
+              />
+              <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500">
+                <span>{new Date().toLocaleDateString('en-US', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</span>
+                <span>•</span>
+                <span className="text-gray-400">Draft</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Desktop MenuBar */}
       <div className="hidden md:block relative z-50 mb-4">
-        <MenuBar editor={editor} />
+        <MenuBar editor={editor}/>
       </div>
       
       {/* Editor Container */}
@@ -256,3 +336,6 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
     </div>
   );
 }
+
+// Remove the entire MenuBar function definition from here
+// The MenuBar component is now imported from ./menu-bar
