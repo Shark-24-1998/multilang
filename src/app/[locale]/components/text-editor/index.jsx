@@ -3,9 +3,10 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextAlign from "@tiptap/extension-text-align";
 import Image from "@tiptap/extension-image";
-import React, { useState, useEffect, useRef } from "react"; // Add useRef
-import { Save, Send, CheckCircle, AlertCircle, Upload } from "lucide-react"; // Add Upload
+import React, { useState, useEffect } from "react";
+import { Save, Send, CheckCircle, AlertCircle, Upload, Eye } from "lucide-react";
 import MenuBar from "./menu-bar";
+import PreviewModal from './preview-modal';
 
 export default function TextEditor({ content = "", onChange = () => {} }) {
   const [title, setTitle] = useState("");
@@ -13,7 +14,9 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
   const [authorImage, setAuthorImage] = useState("");
   const [saveStatus, setSaveStatus] = useState(""); // "saving", "saved", "error"
   const [publishStatus, setPublishStatus] = useState(""); // "publishing", "published", "error"
-  
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('edit');
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -270,7 +273,7 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
 
       {/* Desktop MenuBar */}
       <div className="hidden md:block relative z-50 mb-4">
-        <MenuBar editor={editor}/>
+        <MenuBar editor={editor} />
       </div>
       
       {/* Editor Container */}
@@ -283,7 +286,10 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
 
       {/* Mobile Bottom Toolbar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-2xl">
-        <MenuBar editor={editor} isMobile={true} />
+        <MenuBar 
+          editor={editor} 
+          isMobile={true}
+        />
       </div>
       
       {/* Status Messages */}
@@ -340,20 +346,40 @@ export default function TextEditor({ content = "", onChange = () => {} }) {
           {saveStatus === "saving" ? "Saving..." : "Save as Draft"}
         </button>
         
-        <div className="flex gap-3 order-1 sm:order-2">
+        <div className="flex gap-2 order-1 sm:order-2">
+          {/* Show Preview button only on desktop */}
+          <button
+            onClick={() => setIsPreviewOpen(true)}
+            className="hidden sm:flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 shadow-sm"
+          >
+            <Eye className="w-4 h-4" />
+            Preview
+          </button>
+          
           <button 
             onClick={handlePublish}
             disabled={publishStatus === "publishing" || !title.trim()}
-            className="flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none w-full sm:w-auto"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
           >
             <Send className="w-4 h-4" />
             {publishStatus === "publishing" ? "Publishing..." : "Publish Post"}
           </button>
         </div>
       </div>
+
+      {/* Preview Modal - Only for mobile */}
+      <PreviewModal
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        title={title}
+        content={editor?.getHTML() || ''}
+        authorName={authorName}
+        authorImage={authorImage}
+        editor={editor}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        isMobile={true}
+      />
     </div>
   );
 }
-
-// Remove the entire MenuBar function definition from here
-// The MenuBar component is now imported from ./menu-bar

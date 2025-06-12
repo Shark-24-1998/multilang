@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { FiEdit3, FiSearch, FiEye, FiTag, FiLink, FiImage, FiGlobe, FiTwitter, FiCheckCircle, FiAlertCircle, FiCopy, FiDownload } from 'react-icons/fi';
+import { FiEdit3, FiSearch, FiEye } from 'react-icons/fi';
 
 // Enhanced SEO generation function
 export function generateSeo({
@@ -522,9 +522,36 @@ const TextEditor = () => (
   </div>
 );
 
-const MobileTabbedEditor = ({ TextEditor: PassedTextEditor }) => {
+const MobileTabbedEditor = ({ 
+  TextEditor: PassedTextEditor, 
+  title = "", 
+  authorName = "", 
+  authorImage = "", 
+  editor = null,
+  onContentChange = () => {} // Add this prop
+}) => {
   const [activeTab, setActiveTab] = useState('blog');
+  const [editorContent, setEditorContent] = useState('');
   const EditorComponent = PassedTextEditor || TextEditor;
+
+  // Listen to editor changes
+  useEffect(() => {
+    if (editor) {
+      const content = editor.getHTML();
+      setEditorContent(content);
+    }
+  }, [editor, activeTab]);
+
+  // Handle tab changes without page reload
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+  };
+
+  // Handle editor content changes
+  const handleEditorChange = (content) => {
+    setEditorContent(content);
+    onContentChange(content);
+  };
 
   const tabs = [
     { id: 'blog', label: 'Editor', icon: FiEdit3 },
@@ -532,9 +559,78 @@ const MobileTabbedEditor = ({ TextEditor: PassedTextEditor }) => {
     { id: 'preview', label: 'Preview', icon: FiEye }
   ];
 
+  // Update the preview tab section
+  const renderPreview = () => {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
+            <FiEye className="w-5 h-5 text-white" />
+          </div>
+          <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+            Live Preview
+          </h3>
+        </div>
+        
+        <div className="bg-gradient-to-br from-slate-50 to-slate-100/80 backdrop-blur-sm rounded-2xl border border-slate-200/60 p-6 overflow-y-auto">
+          <div className="prose prose-sm max-w-none">
+            <h1 className="text-2xl font-bold text-gray-900 leading-tight mb-6">
+              {title || "Untitled Post"}
+            </h1>
+            
+            <div className="flex items-center gap-3 pb-4 mb-6 border-b border-gray-100">
+              <div className="flex-shrink-0">
+                {authorImage ? (
+                  <img
+                    src={authorImage}
+                    alt={authorName}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 shadow-sm"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm">
+                    <span className="text-white font-semibold text-lg">
+                      {authorName ? authorName.charAt(0).toUpperCase() : "A"}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div>
+                <div className="font-medium text-gray-900">
+                  {authorName || "Anonymous"}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })} • {Math.ceil((editorContent?.length || 0) / 1500)} min read
+                </div>
+              </div>
+            </div>
+            
+            <div 
+              className="prose prose-sm md:prose-base max-w-none
+                prose-headings:text-gray-900 prose-headings:font-bold 
+                prose-p:text-gray-700 prose-p:leading-relaxed 
+                prose-strong:text-gray-900 prose-strong:font-semibold 
+                prose-em:text-gray-700 prose-em:italic 
+                prose-ul:space-y-1 prose-ol:space-y-1 
+                prose-li:text-gray-700 
+                prose-img:rounded-lg prose-img:mx-auto 
+                prose-img:shadow-md prose-img:my-4"
+              dangerouslySetInnerHTML={{ 
+                __html: editorContent || '<p class="text-gray-500 italic">Start writing to see your preview...</p>' 
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto">
-      {/* Mobile Only: Tab Navigation */}
+      {/* Tab Navigation */}
       <div className="block md:hidden mb-6">
         <div className="flex bg-gradient-to-r from-white/80 to-white/60 backdrop-blur-xl rounded-2xl p-1.5 border border-white/40 shadow-lg shadow-slate-900/5">
           {tabs.map((tab) => {
@@ -542,7 +638,7 @@ const MobileTabbedEditor = ({ TextEditor: PassedTextEditor }) => {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
                 className={`flex-1 flex flex-col items-center py-3 px-4 rounded-xl text-xs font-semibold transition-all duration-300 transform active:scale-95 ${
                   activeTab === tab.id
                     ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 scale-105'
@@ -557,7 +653,7 @@ const MobileTabbedEditor = ({ TextEditor: PassedTextEditor }) => {
         </div>
       </div>
 
-      {/* Mobile Only: Tab Content */}
+      {/* Tab Content */}
       <div className="block md:hidden">
         <div className="bg-gradient-to-br from-white/90 via-white/80 to-white/70 backdrop-blur-2xl rounded-3xl border border-white/60 shadow-2xl shadow-slate-900/10 p-6 min-h-[500px]">
           {activeTab === 'blog' && (
@@ -570,57 +666,21 @@ const MobileTabbedEditor = ({ TextEditor: PassedTextEditor }) => {
                   Blog Editor
                 </h3>
               </div>
-              <EditorComponent />
+              <EditorComponent 
+                onChange={handleEditorChange}
+                content={editorContent}
+                editor={editor}
+              />
             </div>
           )}
 
-          {activeTab === 'seo' && (
-            <SEOComponent />
-          )}
-
-          {activeTab === 'preview' && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
-                  <FiEye className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-                  Live Preview
-                </h3>
-              </div>
-              
-              <div className="bg-gradient-to-br from-slate-50 to-slate-100/80 backdrop-blur-sm rounded-2xl border border-slate-200/60 p-8 min-h-[400px] relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-200/30 to-blue-200/30 rounded-full blur-2xl"></div>
-                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-blue-200/30 to-green-200/30 rounded-full blur-2xl"></div>
-                
-                <div className="relative z-10 text-center space-y-6 mt-16">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl mx-auto flex items-center justify-center">
-                    <FiEye className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="space-y-3">
-                    <h4 className="text-lg font-bold text-slate-800">
-                      Preview Coming Soon
-                    </h4>
-                    <p className="text-slate-600 max-w-sm mx-auto leading-relaxed">
-                      This will show how your blog post will look when published. 
-                      Preview functionality will be implemented here.
-                    </p>
-                  </div>
-                  <div className="flex justify-center">
-                    <div className="px-4 py-2 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-full border border-purple-200/30">
-                      <span className="text-sm font-medium text-slate-600">
-                        Feature in development
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          {activeTab === 'seo' && <SEOComponent />}
+          
+          {activeTab === 'preview' && renderPreview()}
         </div>
       </div>
 
-      {/* Desktop Only: Just Text Editor */}
+      {/* Desktop version remains the same */}
       <div className="hidden md:block">
         <div className="bg-gradient-to-br from-white/90 via-white/85 to-white/80 backdrop-blur-2xl rounded-3xl border border-white/60 shadow-2xl shadow-slate-900/10 p-8 lg:p-10">
           <div className="flex items-center gap-3 mb-8">
